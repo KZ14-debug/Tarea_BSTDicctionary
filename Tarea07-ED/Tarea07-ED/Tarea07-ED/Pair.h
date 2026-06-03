@@ -11,6 +11,11 @@ public:
 	K key;
 	V value;
 
+	Pair()
+	{
+
+	}
+
 	Pair(K key)
 	{
 		this->key = key;
@@ -52,7 +57,7 @@ public:
 		return key >= other.key;
 	}
 
-	friend ostream& operator<<(ostream os, const Pair<K, V>& p)
+	friend ostream& operator<<(ostream& os, const Pair<K, V>& p)
 	{
 		os << "(" << p.key << "," << p.value << ")";
 		return os;

@@ -1,2 +1,5 @@
 ﻿  Tarea07-ED.cpp
+C:\Users\DELL 2024\Desktop\Tarea07-ED\Tarea07-ED\Tarea07-ED\LinkedList.h(1,13): warning C4081: se esperaba 'newline'; se encontró ';'
+  (compilando archivo de origen "Tarea07-ED.cpp")
+  
   Tarea07-ED.vcxproj -> C:\Users\DELL 2024\Desktop\Tarea07-ED\Tarea07-ED\x64\Debug\Tarea07-ED.exe

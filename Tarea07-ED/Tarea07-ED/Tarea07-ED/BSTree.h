@@ -2,6 +2,9 @@
 #include "BSTNode.h"
 #include <stdexcept>
 #include <iostream>
+#include "DLinkedList.h"
+#include "List.h"
+#include "LinkedList.h"
 
 using std::runtime_error;
 using std::cout;
@@ -41,9 +44,9 @@ private:
 		return current;
 	}
 
-	E findAux(BSTNode* current, E element)
+	E findAux(BSTNode<E>* current, E element)
 	{
-		if (current == nulptr)
+		if (current == nullptr)
 		{
 			throw runtime_error("Element not found");
 		}
@@ -60,11 +63,11 @@ private:
 
 		else
 		{
-			return findAux(current->right, element);)
+			return findAux(current->right, element);
 		}
 	}
 
-	BSTNode < E < *removeAux(BSTNode<E>* current, E element, E* result)
+	BSTNode<E>* removeAux(BSTNode<E>* current, E element, E* result)
 	{
 		if (current == nullptr)
 		{
@@ -73,13 +76,13 @@ private:
 
 		if (element < current->element)
 		{
-			current->left = removeAux(current->left.element, result);
+			current->left = removeAux(current->left, element, result);
 			return current;
 		}
 
 		if (element > current->element)
 		{
-			current->right = removeAux(current->right.element, result);
+			current->right = removeAux(current->right, element, result);
 			return current;
 		}
 
@@ -95,11 +98,11 @@ private:
 		{
 			BSTNode<E>* child = current->onlyChild();
 			delete current;
-			return child;))
+			return child;
 		}
 
 		BSTNode<E>* successor = getSuccessor(current);
-		swap(succesor, current);
+		swap(successor, current);
 		current->right = removeAux(current->right, element, result);
 		return current;
 	}
@@ -123,7 +126,7 @@ private:
 		n2->element = temp;
 	}
 
-	clearAux(BSTNode<E>* current)
+	void clearAux(BSTNode<E>* current)
 	{
 		if (current == nullptr)
 		{
@@ -133,9 +136,10 @@ private:
 		clearAux(current->left);
 		clearAux(current->right);
 		delete current;
+		return;
 	}
 
-	void getElementAux(BSTNode<E>* current, List<E>* elements)
+	void getElementsAux(BSTNode<E>* current, List<E>* elements)
 	{
 		if (current == nullptr)
 		{
@@ -144,7 +148,7 @@ private:
 
 		getElementsAux(current->left, elements);
 		elements->append(current->element);
-		getElementsAux(current->right, elements);)
+		getElementsAux(current->right, elements);
 	}
 
 	void printAux(BSTNode<E>* current)
@@ -176,6 +180,7 @@ public:
 	void insert(E element)
 	{
 		root = insertAux(root, element);
+		size++; 
 	}
 
 	E find(E element)
@@ -206,6 +211,7 @@ public:
 	{
 		E result;
 		root = removeAux(root, element, &result);
+		size--;
 		return result;
 	}
 
@@ -242,7 +248,7 @@ public:
 
 	List<E>* getElements()
 	{
-		List<E>* elements = new DLinkedList<E>();
+		List<E>* elements = new LinkedList<E>();
 		getElementsAux(root, elements);
 		return elements;
 	}

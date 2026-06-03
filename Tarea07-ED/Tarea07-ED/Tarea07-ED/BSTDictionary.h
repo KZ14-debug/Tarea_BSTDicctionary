@@ -1,6 +1,11 @@
 #pragma once
 #include "Dictionary.h"
 #include "BSTree.h"
+#include "Dictionary.h"
+#include "BSTree.h"
+#include "Pair.h"
+#include "LinkedList.h"
+#include <stdexcept>
 
 
 template <typename K, typename V>
@@ -9,29 +14,33 @@ class BSTDictionary : public Dictionary<K, V>
 
 private:
 
-	BSTree<Pair<K, V>> diccionario;
+	BSTree<Pair<K, V>>* diccionario;
 
 public:
 
 	BSTDictionary()
 	{
+		diccionario = new BSTree<Pair<K, V>>();
 	}
 
 	~BSTDictionary()
 	{
+		delete diccionario;
 	}
+
+
 
 	void insert(K key, V value)
 	{
 
-		diccionario.insert(Pair<K, V>(key, value));
+		diccionario->insert(Pair<K, V>(key, value));
 
 	}
 
 	V remove(K key)
 	{
 
-		Pair<K, V> removed = diccionario.remove(Pair<K, V>(key));
+		Pair<K, V> removed = diccionario->remove(Pair<K, V>(key));
 		return removed.value;
 
 	}
@@ -39,7 +48,8 @@ public:
 	V getValue(K key)
 	{
 
-		Pair<K, V> found = diccionario.find(Pair<K, V>(key));
+		Pair<K, V> found = diccionario->find(Pair<K, V>(key));
+		
 		return found.value;
 	
 	}
@@ -47,13 +57,13 @@ public:
 	void setValue(K key, V value)
 	{
 
-		if (!diccionario.contains(Pair<K, V>(key)))
+		if (!diccionario->contains(Pair<K, V>(key)))
 		{
 			throw runtime_error("Key not found");
 		}
 
-		diccionario.remove(Pair<K, V>(key));
-		diccionario.insert(Pair<K, V>(key, value));
+		diccionario->remove(Pair<K, V>(key));
+		diccionario->insert(Pair<K, V>(key, value));
 
 	}
 
@@ -61,7 +71,7 @@ public:
 	{
 		Pair<K, V> pair(key);
 
-		if (diccionario.contains(pair))
+		if (diccionario->contains(pair))
 		{
 			return true;
 		}
@@ -69,22 +79,25 @@ public:
 		return false;
 	}
 
+
 	void clear()
 	{
-		diccionario.clear();
+		diccionario->clear();
 	}
+
+
 
 	List<K>* getKeys()
 	{
-		List<Pair<K, V>>* pares = diccionario.getElements();
-		List<K>* llave = new List<K>();
+		List<Pair<K, V>>* pares = diccionario->getElements();
+		List<K>* llave = new LinkedList<K>();
 
 		pares->goToStart();
 
 		while (!pares->atEnd())
 		{
 
-			Pair<K, V> parActual;
+			Pair<K, V> parActual = pares->getElement();
 			
 
 			parActual = pares->getElement();
@@ -95,12 +108,18 @@ public:
 
 		}
 
+		delete pares;
+
 		return llave;
+
+
 	}
+
+
 
 	List<V>* getValues()
 	{
-		List<Pair<K, V>>* pares = diccionario.getElements();
+		List<Pair<K, V>>* pares = diccionario->getElements();
 
 		List<V>* valor = new LinkedList<V>();
 
@@ -110,10 +129,7 @@ public:
 		while (!pares->atEnd())
 		{
 
-			Pair<K, V> actual;
-
-				
-			actual = pares->getElement();
+			Pair<K, V> actual = pares->getElement();
 
 			valor->append(actual.value);
 
@@ -121,12 +137,24 @@ public:
 
 		}
 
+		delete pares; 
+
 		return valor;
 	}
 
 	int getSize()
 	{
-		return diccionario.getSize();
+		return diccionario->getSize();
+	}
+
+	bool isEmpty()
+	{
+		return diccionario->isEmpty();
+	}
+
+	void print()
+	{
+		diccionario->print();
 	}
 
 	void update(Dictionary<K, V>* D)
@@ -153,7 +181,9 @@ public:
 			}
 
 
-			keys->next();
+			llave->next();
+
+			delete llave;
 
 		}
 	}
