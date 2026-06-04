@@ -174,7 +174,7 @@ public:
 
 	~BSTree()
 	{
-		clear();
+
 	}
 
 	void insert(E element)

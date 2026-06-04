@@ -33,17 +33,33 @@ public:
 	void insert(K key, V value)
 	{
 
-		diccionario->insert(Pair<K, V>(key, value));
+		if (contains(key))
+		{
+			throw runtime_error("Llave duplicada");
+		}
+
+
+		Pair<K, V> par(key, value);
+
+		diccionario->insert(par);
 
 	}
+
 
 	V remove(K key)
 	{
 
-		Pair<K, V> removed = diccionario->remove(Pair<K, V>(key));
-		return removed.value;
+		if (!contains(key))
+		{
+			throw runtime_error("Esta llave no existe");
+		}
 
+		Pair<K, V> par(key);
+		return diccionario->remove(par).value;
+	
 	}
+
+
 
 	V getValue(K key)
 	{
@@ -59,7 +75,7 @@ public:
 
 		if (!diccionario->contains(Pair<K, V>(key)))
 		{
-			throw runtime_error("Key not found");
+			throw runtime_error("Esta llave no existe");
 		}
 
 		diccionario->remove(Pair<K, V>(key));
@@ -69,19 +85,29 @@ public:
 
 	bool contains(K key)
 	{
-		Pair<K, V> pair(key);
-
-		if (diccionario->contains(pair))
+		try
 		{
+			diccionario->find(Pair<K, V>(key));
+
 			return true;
 		}
 
-		return false;
+		catch (runtime_error&)
+		{
+			return false;
+		}
 	}
 
 
 	void clear()
 	{
+
+		if (isEmpty())
+		{
+			throw runtime_error("Diccionario vacio");
+		}
+
+
 		diccionario->clear();
 	}
 
